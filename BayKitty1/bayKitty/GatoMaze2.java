@@ -48,8 +48,10 @@ public class GatoMaze2 extends Actor
         isKeyPress = false;
         //Interactuar con las flechas
         if(Greenfoot.isKeyDown("up")){
-            if(!revisarCaja('u')){
+            if(!revisarCaja('u')){ //Revisar si esta cerca de una caja
+                //if para que no siga si hay agua
                 if(!revisarAguaHorizontal('u') && !revisarAguaVertical('u') && !revisarAguaVertical2('u') && !revisarAguaHorizontal2('u')){
+                    //revisar el suelo
                     if(!revisarParedes('u')){
                         caminarArriba();
                         setLocation(getX(), getY()-gatoMove);
@@ -72,8 +74,9 @@ public class GatoMaze2 extends Actor
         }
         
         if(Greenfoot.isKeyDown("right")){
-            if(!revisarCaja('r')){
+            if(!revisarCaja('r')){ //revisar que este tocando la caja
                 if(!revisarAguaHorizontal('r') && !revisarAguaVertical('r') && !revisarAguaVertical2('r') && !revisarAguaHorizontal2('r')){
+                    //revisar el suelo
                     if(!revisarParedes('r')){
                         caminarDerecha();
                         setLocation(getX()+gatoMove, getY());
@@ -81,6 +84,7 @@ public class GatoMaze2 extends Actor
                         isKeyPress = true;
                     }
                 }else{
+                    //Contador abajo
                     Maze2.contVidas.add(-1);
                     if(Maze2.contVidas.getValue() == -1){
                         Greenfoot.setWorld(new FinalMalo());
@@ -144,6 +148,7 @@ public class GatoMaze2 extends Actor
         }
         
         //funcion para el movimiento del gato
+        
         if(!(isKeyPress)){
             //terminar de caminar
             pararCaminar();
@@ -163,7 +168,7 @@ public class GatoMaze2 extends Actor
                 disparar();
             }
         }
-        
+        //Si toca la maceta se ira al siguiente nivel o final
         Maceta m = (Maceta) getOneIntersectingObject(Maceta.class);
         if(m != null){
             Greenfoot.setWorld(new FinalBueno());
@@ -171,8 +176,8 @@ public class GatoMaze2 extends Actor
         
     }
     
-    public boolean revisarCaja(char dir){
-        Caja oF = null;
+    public boolean revisarCaja(char dir){ //dir es la direccion del objeto
+        Caja oF = null; //para obtener una intereaccion
         if (dir == 'l'){
             oF = (Caja) getOneObjectAtOffset(-gatoMove,0,Caja.class);
         }
@@ -185,6 +190,7 @@ public class GatoMaze2 extends Actor
         if (dir == 'd'){
             oF = (Caja) getOneObjectAtOffset(0,gatoMove,Caja.class);
         }
+        
         if (oF != null){
             return true;
         }
