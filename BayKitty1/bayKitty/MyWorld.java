@@ -19,8 +19,11 @@ public class MyWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1); 
         addObject(seleccionar, 140, 280);
+        Greenfoot.playSound("Fondo.mp3");
     }
     public void act(){
+        //funcion para Que el cuadro suba y bajo y pueda interactuar
+        
         if((Greenfoot.isKeyDown("W") || Greenfoot.isKeyDown("up"))&&(opcion != 0)){
             opcion++;
         }

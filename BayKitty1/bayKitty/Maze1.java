@@ -25,6 +25,8 @@ public class Maze1 extends World
         addObject(gato, 30, 380);
         addObject(new ObstaculoFacil(80,40), 380, 350);
         addObject(new ObstaculoFacil(80,50), 150, 290);
+        addObject(new ObstaculoFacil(80,60), 200, 100);
+        addObject(new ObstaculoFacil(80,70), 250, 250);
         addObject(new Arma(), 480, 20);
         addObject(new ObstaculoFacilV(100,80), 510, 300);
         addObject(new ObstaculoFacilV(90,80), 100, 200);

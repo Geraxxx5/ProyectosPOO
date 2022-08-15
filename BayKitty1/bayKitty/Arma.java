@@ -22,6 +22,7 @@ public class Arma extends Actor
         boolean flagBala = true;
         int contBala = 2;
         while(flagBala){
+            //Interacciones con los objetos para destruirlos
             ObstaculoFacil oF = (ObstaculoFacil) getOneIntersectingObject(ObstaculoFacil.class);
             ObstaculoFacilV oFv = (ObstaculoFacilV) getOneIntersectingObject(ObstaculoFacilV.class);
             if(oF != null){
@@ -35,6 +36,7 @@ public class Arma extends Actor
                 flagBala = false;
             }
             if(flagBala){
+                //Depende de la direccion de la bala este va para destruirlo
                 if(dir == 'l'){
                     if(!revisar(dir)){
                         setLocation(getX()-movePistola, getY());
@@ -72,6 +74,7 @@ public class Arma extends Actor
         }
     }
     
+    //Revisa que el color del fondo sea gris para que si lo toca pueda ser destruido y no traspasar las paredes
     public boolean revisar(char dir){
         Color c = null;
         

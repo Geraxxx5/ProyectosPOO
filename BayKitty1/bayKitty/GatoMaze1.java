@@ -11,6 +11,7 @@ public class GatoMaze1 extends Actor
      * Act - do whatever the GatoMaze1 wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
+    //Importaciones de imagenes para el moviemiento del gato
     GreenfootImage derecha1 = new GreenfootImage("GatoParaLaDerecha.png");
     GreenfootImage derecha2 = new GreenfootImage("GatoParaLaDerecha2.png");
     GreenfootImage derechaStop = new GreenfootImage("GatoParaLaDerechaParado.png");
@@ -24,6 +25,7 @@ public class GatoMaze1 extends Actor
     GreenfootImage abajo2 = new GreenfootImage("GatoParaAbajo2.png");
     GreenfootImage abajoStop = new GreenfootImage("GatoParaAbajoParado.png");
     
+    //variables a utilizar
     int gatoMove = 3;
     boolean disparo;
     boolean isKeyPress = false;
@@ -31,6 +33,7 @@ public class GatoMaze1 extends Actor
     int frame;
     char dir = 'a';
     
+    //Constructor
     public GatoMaze1(){
         getImage().scale(22,22);
         this.disparo = false;
@@ -41,8 +44,9 @@ public class GatoMaze1 extends Actor
     {
         // Add your action code here.
         isKeyPress = false;
+        //Interactuar con las flechas
         if(Greenfoot.isKeyDown("up")){
-            if(!revisarAguaHorizontal('u')){
+            if(!revisarAguaHorizontal('u') && !revisarAguaVertical('u')){
                 if(!revisarParedes('u')){
                     caminarArriba();
                     setLocation(getX(), getY()-gatoMove);
@@ -51,10 +55,15 @@ public class GatoMaze1 extends Actor
                 } 
             }else{
                 Maze1.contVidas.add(-1);
+                if(Maze1.contVidas.getValue() == -1){
+                    Greenfoot.setWorld(new FinalMalo());
+                }
+                Greenfoot.delay(1);
             }
         }
+        
         if(Greenfoot.isKeyDown("right")){
-            if(!revisarAguaHorizontal('r')){
+            if(!revisarAguaHorizontal('r') && !revisarAguaVertical('r')){
                 if(!revisarParedes('r')){
                     caminarDerecha();
                     setLocation(getX()+gatoMove, getY());
@@ -62,33 +71,54 @@ public class GatoMaze1 extends Actor
                     isKeyPress = true;
                 }
             }else{
-                if(Maze1.contVidas.getValue() == 0){
-                    
-                }
                 Maze1.contVidas.add(-1);
+                if(Maze1.contVidas.getValue() == -1){
+                    Greenfoot.setWorld(new FinalMalo());
+                }
+                Greenfoot.delay(1);
             }
         }
+        
         if(Greenfoot.isKeyDown("left")){
-            if(!revisarParedes('l')){
-                caminarIzquierda();
-                setLocation(getX()-gatoMove, getY());
-                setRotation(180);
-                isKeyPress = true;
+            if(!revisarAguaHorizontal('l') && !revisarAguaVertical('l')){
+                if(!revisarParedes('l')){
+                    caminarIzquierda();
+                    setLocation(getX()-gatoMove, getY());
+                    setRotation(180);
+                    isKeyPress = true;
+                }
+            }else{
+                Maze1.contVidas.add(-1);
+                if(Maze1.contVidas.getValue() == -1){
+                    Greenfoot.setWorld(new FinalMalo());
+                }
+                Greenfoot.delay(1);
             }
         }
+        
         if(Greenfoot.isKeyDown("down")){
-            if(!revisarParedes('d')){
-                caminarAbajo();
-                setLocation(getX(), getY()+gatoMove);
-                setRotation(90);
-                isKeyPress = true;
+            if(!revisarAguaHorizontal('d') && !revisarAguaVertical('d')){
+                if(!revisarParedes('d')){
+                    caminarAbajo();
+                    setLocation(getX(), getY()+gatoMove);
+                    setRotation(90);
+                    isKeyPress = true;
+                }
+            }else{
+                Maze1.contVidas.add(-1);
+                if(Maze1.contVidas.getValue() == -1){
+                    Greenfoot.setWorld(new FinalMalo());
+                }
+                Greenfoot.delay(1);
             }
         }
+        
+        //funcion para el movimiento del gato
         if(!(isKeyPress)){
             //terminar de caminar
             pararCaminar();
         }
-        
+        //Cuando obtenga la bola de pelo pueda disparar
         if(!this.disparo){
             Arma bP = (Arma) getOneIntersectingObject(Arma.class);
             if(bP != null){
@@ -103,8 +133,14 @@ public class GatoMaze1 extends Actor
                 disparar();
             }
         }
+        
+        Maceta m = (Maceta) getOneIntersectingObject(Maceta.class);
+        if(m != null){
+            Greenfoot.setWorld(new Escena2());
+        }
+        
     }
-
+    //Esta funcion es para revisar el agua que esta horizontal
     public boolean revisarAguaHorizontal(char dir){
         ObstaculoFacil oF = null;
         if (dir == 'l'){
@@ -125,10 +161,31 @@ public class GatoMaze1 extends Actor
         return false;
     }
     
+     public boolean revisarAguaVertical(char dir){
+        ObstaculoFacilV oF = null;
+        if (dir == 'l'){
+            oF = (ObstaculoFacilV) getOneObjectAtOffset(-gatoMove,0,ObstaculoFacilV.class);
+        }
+        if (dir == 'r'){
+            oF = (ObstaculoFacilV) getOneObjectAtOffset(gatoMove,0,ObstaculoFacilV.class);
+        }
+        if (dir == 'u'){
+            oF = (ObstaculoFacilV) getOneObjectAtOffset(0,-gatoMove,ObstaculoFacilV.class);
+        }
+        if (dir == 'd'){
+            oF = (ObstaculoFacilV) getOneObjectAtOffset(0,gatoMove,ObstaculoFacilV.class);
+        }
+        if (oF != null){
+            return true;
+        }
+        return false;
+    }
+    //Esta funcion es para disparar
     public void disparar(){
         int rotacion = getRotation();
         Arma bola = new Arma();
-        getWorld().addObject(bola, getX(), getY()); 
+        getWorld().addObject(bola, getX(), getY());
+        //Depende de la rotacion se le asinara una posicion
         if(getRotation() == 270){
             dir='u';
         }
@@ -142,9 +199,10 @@ public class GatoMaze1 extends Actor
         if(getRotation() == 0){
             dir='r';
         }
+        //se llamara a un metodo de la clase Arma
         bola.disparar(dir);       
     }
-    
+    //Para que el gato se quede parado visualmente
     public void pararCaminar(){
         switch(viendoDireccion){
             case "derecha":
@@ -162,7 +220,7 @@ public class GatoMaze1 extends Actor
                 break;
         }
     }
-    
+    //Camina para abajo el gato visulamente
     public void caminarAbajo(){
         frame ++;
         viendoDireccion = "abajo";
@@ -184,7 +242,7 @@ public class GatoMaze1 extends Actor
             return;
         }
     }
-    
+    //Camina para arriba visualmente
     public void caminarArriba(){
         frame ++;
         viendoDireccion = "arriba";
@@ -251,7 +309,7 @@ public class GatoMaze1 extends Actor
         }
     }
     
-    
+    //revisa el color del fondo para que si detecta gris este no pueda traspasar las barreras
     public boolean revisarParedes(char dir){
         Color c = null;
         

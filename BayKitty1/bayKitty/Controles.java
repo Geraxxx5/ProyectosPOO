@@ -17,7 +17,8 @@ public class Controles extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1); 
-        GreenfootImage bg = new GreenfootImage("TerceraPantalla.png");
+        //se ajusta la imagen
+        GreenfootImage bg = new GreenfootImage("TerceraPantalla1.png");
         bg.scale(getWidth(), getHeight());
         setBackground(bg);
     }
